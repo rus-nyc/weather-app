@@ -1,34 +1,55 @@
-/*
-  This is your site JavaScript code - you can add interactivity!
-*/
-
-// Print a message in the browser's dev tools console each time the page loads
-// Use your menus or right-click / control-click and choose "Inspect" > "Console"
-console.log("Hello 🌎");
-
-/* 
-Make the "Click me!" button move when the visitor clicks it:
-- First add the button to the page by following the steps in the TODO 🚧
-*/
-const btn = document.querySelector("button"); // Get the button from the page
-if (btn) { // Detect clicks on the button
-  btn.onclick = function () {
-    // The 'dipped' class in style.css changes the appearance on click
-    btn.classList.toggle("dipped");
+const api = {
+    endpoint: "https://api.openweathermap.org/data/2.5/",
+    key: "93c4e1c33c656f1bc1a443c4a51c74cc"
   };
-}
-
-
-// ----- GLITCH STARTER PROJECT HELPER CODE -----
-
-// Open file when the link in the preview is clicked
-let goto = (file, line) => {
-  window.parent.postMessage(
-    { type: "glitch/go-to-line", payload: { filePath: file, line: line } }, "*"
-  );
-};
-// Get the file opening button from its class name
-const filer = document.querySelectorAll(".fileopener");
-filer.forEach((f) => {
-  f.onclick = () => { goto(f.dataset.file, f.dataset.line); };
-});
+  
+  const input = document.querySelector("#input");
+  input.addEventListener("keypress", enter);
+  
+  function enter(e) {
+    if (e.keyCode === 13) {
+      getInfo(input.value);
+    }
+  }
+  
+  async function getInfo(data) {
+    const res = await fetch(`${api.endpoint}weather?q=${data}&units=metric&appid=${api.key}`);
+    const result = await res.json();
+    displayResult(result);
+  }
+  
+  function displayResult(result) {
+    let city = document.querySelector("#city");
+    city.textContent = `${result.name}, ${result.sys.country}`;
+  
+    getOurDate();
+  
+    let temperature = document.querySelector("#temperature");
+    temperature.innerHTML = `${Math.round(result.main.temp)} <span>°</span>`;
+  
+    let feelsLike = document.querySelector("#feelslike");
+    feelsLike.innerHTML = `${Math.round(result.main.feels_like)} <span>°</span>`;
+  
+    let conditions = document.querySelector("#conditions");
+    conditions.innerHTML = `${result.weather[0].description}`;
+  
+    let variation = document.querySelector("#variation");
+    variation.innerHTML = `Min: ${Math.round(result.main.temp_min)} <span>°</span> Max: ${Math.round(result.main.temp_max)} <span>°</span>`;
+  }
+  
+  function getOurDate() {
+    const myDate = new Date();
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  
+    let day = days[myDate.getDay()];
+    let todayDate = myDate.getDate();
+    let month = months[myDate.getMonth()];
+    let year = myDate.getFullYear();
+  
+    let showDate = document.querySelector("#date");
+    showDate.textContent = `${day} ${todayDate} ${month} ${year}`;
+  }
+  
+  getOurDate();
+  
