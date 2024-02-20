@@ -27,10 +27,10 @@ const api = {
     let temperature = document.querySelector("#temperature");
     temperature.innerHTML = `${Math.round(result.main.temp)} <span>°</span>`;
   
-    let feelsLike = document.querySelector("#feelslike");
+    let feelsLike = document.querySelector("#feelsLike");
     feelsLike.innerHTML = `${Math.round(result.main.feels_like)} <span>°</span>`;
   
-    let conditions = document.querySelector("#conditions");
+    let conditions = document.querySelector("#condition");
     conditions.innerHTML = `${result.weather[0].description}`;
   
     let variation = document.querySelector("#variation");
