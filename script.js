@@ -7,7 +7,7 @@ const api = {
   input.addEventListener("keypress", enter);
   
   function enter(e) {
-    if (e.keyCode === 13) {
+    if (e.key === "Enter") {
       getInfo(input.value);
     }
   }
